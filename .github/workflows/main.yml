@@ -4,13 +4,25 @@ on:
     workflow_dispatch:
 
 jobs:
-    check:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
-          with:
-            repository: awesomel-es/slave-repository
-            token: ${{ secrets.GH_TK }}
-        - name: Echoing files
-          run: ls
+    dependency_slave_repository:
+        uses: awesomel-es/slave-repository/.github/workflows/main.yml@main
+        secrets:
+            secret_token: ${{ secrets.GH_TK }}
+
+    build:
+        needs: dependency_slave_repository
+        runs-on: ubuntu-latest
+    
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+            
+            - name: 'Download Artifact'
+              uses: actions/download-artifact@v3
+              with:
+                name: slave-repository
+            
+            - name: 'Echoing test file'
+              run: |
+                ls -la
+                more test.txt
