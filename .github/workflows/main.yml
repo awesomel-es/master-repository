@@ -1,0 +1,16 @@
+name: Build and Deploy
+
+on:
+    workflow_dispatch:
+
+jobs:
+    check:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+          with:
+            repository: awesomel-es/slave-repository
+            token: ${{ secrets.GH_TK }}
+        - name: Echoing files
+          run: ls
